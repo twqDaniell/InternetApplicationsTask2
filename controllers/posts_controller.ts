@@ -55,7 +55,7 @@ class PostsController<IPost> {
     const updateData = req.body;
   
     try {
-      const updatedPost = await postModel.findByIdAndUpdate(postId, updateData, { new: true });
+      const updatedPost = await this.post.findByIdAndUpdate(postId, updateData, { new: true });
       res.status(200).send(updatedPost);
     } catch (error) {
       res.status(400).send(error);
