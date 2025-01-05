@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { Model } from "mongoose";
 import postModel, { IPost } from "../models/posts_model";
-
 class PostsController<IPost> {
   post: Model<IPost>;
   constructor(post: Model<IPost>) {
@@ -15,9 +14,9 @@ class PostsController<IPost> {
       const post = await this.post.findById(postId);
 
       if (post === null) {
-        return res.status(404).send("not found");
+        res.status(404).send("not found");
       } else {
-        return res.status(200).send(post);
+        res.status(200).send(post);
       }
     } catch (error) {
       res.status(400).send(error);
@@ -63,4 +62,4 @@ class PostsController<IPost> {
   };
 };
 
-export default PostsController;
+export default new PostsController(postModel);

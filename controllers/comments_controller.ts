@@ -54,7 +54,7 @@ class CommentsController<IComment> {
         res.send(comments);
       }
     } catch (error) {
-      res.status(400).send(error.message);
+      res.status(400).send(error);
     }
   };
 
@@ -65,9 +65,9 @@ class CommentsController<IComment> {
       const comment = await this.comment.findById(commentId);
 
       if (comment === null) {
-        return res.status(404).send("not found");
+        res.status(404).send("not found");
       } else {
-        return res.status(200).send(comment);
+        res.status(200).send(comment);
       }
     } catch (error) {
       res.status(400).send(error);
@@ -75,4 +75,4 @@ class CommentsController<IComment> {
   };
 };
 
-export default CommentsController;
+export default new CommentsController(commentModel);
