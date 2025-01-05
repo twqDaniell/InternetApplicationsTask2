@@ -44,10 +44,14 @@ class CommentsController<IComment> {
 
   async getAllComments(req: Request, res: Response) {
     const postFilter = req.query.postId;
+    const userFilter = req.query.user;
 
     try {
       if (postFilter) {
         const comments = await this.comment.find({ postId: postFilter });
+        res.send(comments);
+      } else if (userFilter) {
+        const comments = await this.comment.find({ user: userFilter });
         res.send(comments);
       } else {
         const comments = await this.comment.find();
