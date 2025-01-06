@@ -45,6 +45,22 @@ class UsersController<IUser> {
       res.status(400).send(error);
     }
   }
+
+  async getUserById(req: Request, res: Response) {
+    const userId = req.params.id;
+
+    try {
+      const user = await this.user.findById(userId);
+
+      if (user === null) {
+        res.status(404).send("not found");
+      } else {
+        res.status(200).send(user);
+      }
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
 }
 
 export default new UsersController(userModel);
