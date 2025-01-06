@@ -12,8 +12,8 @@ class CommentsController<IComment> {
     const newComment = req.body;
 
     try {
-      const newPost = await this.comment.create(newComment);
-      res.status(201).send(newPost);
+      const comment = await this.comment.create(newComment);
+      res.status(201).send(comment);
     } catch (error) {
       res.status(400).send(error);
     }

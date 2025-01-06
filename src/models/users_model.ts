@@ -7,7 +7,7 @@ export interface IUser {
   password: string;
 }
 
-const postSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser>({
   username: {
     type: String,
     required: true,
@@ -22,6 +22,6 @@ const postSchema = new Schema<IUser>({
   },
 });
 
-const userModel = mongoose.model<IUser>("Posts", postSchema);
+const userModel = mongoose.model<IUser>("Users", userSchema);
 
 export default userModel;

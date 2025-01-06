@@ -71,3 +71,14 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:3002/comments/673a2570b110d0b2a1908ff0
+
+###
+
+POST http://localhost:3002/users
+Content-Type: application/json
+
+{
+    "username": "twqdaniell",
+    "email": "daniel.ar.mcl@gmail.com",
+    "password": "password123"
+}
