@@ -74,11 +74,30 @@ DELETE http://localhost:3002/comments/673a2570b110d0b2a1908ff0
 
 ###
 
-POST http://localhost:3002/users
+POST http://localhost:3002/auth/register
 Content-Type: application/json
 
 {
     "username": "twqdaniell",
     "email": "daniel.ar.mcl@gmail.com",
     "password": "password123"
+}
+
+###
+
+POST http://localhost:3002/auth/login
+Content-Type: application/json
+
+{
+    "email": "daniel.ar.mcl@gmail.com",
+    "password": "password123"
+}
+
+###
+
+POST http://localhost:3002/auth/logout
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzdkMzQwNzVlY2U1NjBhZDBmYzAyZjAiLCJyYW5kb20iOiIwLjY1OTg4MTA1NjExODI2OTEiLCJpYXQiOjE3MzYyNTg1NjksImV4cCI6MTczNjg2MzM2OX0.9ofgyakGqIjyudMg4rreZYF6AtUqEzeivH2WaU6uMeg"
 }
