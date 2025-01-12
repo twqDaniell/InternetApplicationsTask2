@@ -114,7 +114,7 @@ describe("Comments Test", () => {
       .put(baseUrl + "/invalidCommentId")
       .set("authorization", "JWT " + testUser.accessToken)
       .send(updatedData);
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(400);
   });
   
   test("Test Delete comment", async () => {
