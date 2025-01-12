@@ -1,5 +1,7 @@
 import express, { Express } from "express";
 const app = express();
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger";
 import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
@@ -12,6 +14,10 @@ import authRoute from "./routes/auth_route";
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
+
+app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
