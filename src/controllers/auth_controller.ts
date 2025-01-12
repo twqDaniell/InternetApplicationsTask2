@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import userModel, { IUser } from "../models/users_model";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -153,4 +153,54 @@ const logout = async (req: Request, res: Response) => {
   }
 };
 
-export default { register, login, logout };
+const refresh = async (req: Request, res: Response) => {
+    const refreshToken = req.body.refreshToken;
+
+    try {
+        const user = await verifyAccessToken(refreshToken);
+
+        const tokens = generateTokens(user);
+        await user.save();
+
+        if(!tokens) {
+            res.status(400).send("Access denied");
+            return;
+        }
+
+        res.status(200).send({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken
+        });
+    } catch (err) {
+        res.status(400).send("Access Denied");
+    }
+}
+
+type Payload = {
+    _id: string;
+}
+
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const authorization = req.headers.authorization;
+    const token = authorization && authorization.split(" ")[1];
+    if (!token) {
+        res.status(401).send("Access Denied");
+        return;
+    }
+    if (!process.env.TOKEN_SECRET) {
+        res.status(400).send("Server Error");
+        return;
+    }
+
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
+        if (err) {
+            res.status(401).send("Access Denied");
+            return;
+        }
+        const userId = (payload as Payload)._id;
+        req.params.userId = userId;
+        next();
+    });
+};
+
+export default { register, login, logout, refresh };

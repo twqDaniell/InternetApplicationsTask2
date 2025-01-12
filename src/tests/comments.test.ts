@@ -21,12 +21,35 @@ const testComments: Comment[] = testCommentsData.map(comment => ({
     createdAt: new Date(comment.createdAt),
   }));
 
+  type User = {
+    username?: string;
+    email: string;
+    password: string;
+    accessToken?: string;
+    refreshToken?: string;
+    _id?: string;
+  };
+  
+  const testUser: User = {
+    username: "testuser",
+    email: "user@test.com",
+    password: "1234567",
+  };
+  
+
 const baseUrl = "/comments";
 
 beforeAll(async () => {
   console.log("Before all tests");
   app = await appInit();
   await commentsModel.deleteMany();
+
+  await request(app).post("/auth/register").send(testUser);
+  const response = await request(app).post("/auth/login").send(testUser);
+  testUser.refreshToken = response.body.refreshToken;
+  testUser.accessToken = response.body.accessToken;
+  testUser._id = response.body._id;
+  expect(response.statusCode).toBe(200);
 });
 
 afterAll(async () => {
@@ -44,7 +67,7 @@ describe("Comments Test", () => {
 
   test("Test create new comment", async () => {
     for (let comment of testComments) {
-      const response = await request(app).post(baseUrl).send(comment);
+      const response = await request(app).post(baseUrl).set("authorization", "JWT " + testUser.accessToken).send(comment);
       expect(response.statusCode).toBe(201);
       expect(response.body.message).toBe(comment.message);
       expect(response.body.postId).toBe(comment.postId);
@@ -76,7 +99,7 @@ describe("Comments Test", () => {
   });
 
   test("Test Delete comment", async () => {
-    const response = await request(app).delete(baseUrl + "/" + testComments[0]._id);
+    const response = await request(app).delete(baseUrl + "/" + testComments[0]._id).set("authorization", "JWT " + testUser.accessToken);
     expect(response.statusCode).toBe(200);
 
     const responseGet = await request(app).get(baseUrl + "/" + testComments[0]._id);
@@ -84,7 +107,7 @@ describe("Comments Test", () => {
   });
 
   test("Test create new comment fail", async () => {
-    const response = await request(app).post(baseUrl).send({
+    const response = await request(app).post(baseUrl).set("authorization", "JWT " + testUser.accessToken).send({
       title: "Test Comment 1",
       content: "Test Content 1",
     });
