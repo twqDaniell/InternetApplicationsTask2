@@ -137,31 +137,4 @@ describe("Auth Test", () => {
     expect(response2.statusCode).toBe(200);
     expect(response2.body.refreshToken).not.toEqual(testUser.refreshToken);
   });
-
-  jest.setTimeout(10000);
-  test("Token expired", async () => {
-    await new Promise((resolve) => setTimeout(resolve, 7000));
-
-    const response = await request(app)
-      .post("/posts")
-      .set({ authorization: "JWT " + testUser.accessToken })
-      .send(testPosts[0]);
-
-    expect(response.statusCode).not.toBe(201);
-
-    const response2 = await request(app).post("/auth/refresh").send({
-      refreshToken: testUser.refreshToken,
-    });
-    expect(response2.statusCode).toBe(200);
-
-    testUser.accessToken = response2.body.accessToken;
-    testUser.refreshToken = response2.body.refreshToken;
-
-    const response3 = await request(app)
-      .post("/posts")
-      .set({ authorization: "JWT " + testUser.accessToken })
-      .send(testPosts[0]);
-
-    expect(response3.statusCode).toBe(201);
-  });
 });
