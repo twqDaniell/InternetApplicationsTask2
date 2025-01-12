@@ -6,5 +6,6 @@ router.post("/", postsController.createPost.bind(postsController));
 router.get("/:id", postsController.getPostById.bind(postsController));
 router.get("/", postsController.getAllPosts.bind(postsController));
 router.put("/:id", postsController.updatePost.bind(postsController))
+router.delete("/:id", postsController.deletePost.bind(postsController))
 
 export default router;

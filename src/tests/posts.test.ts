@@ -65,6 +65,14 @@ describe("Posts Test", () => {
     expect(response.body.length).toBe(2);
   });
 
+  test("Test Delete post", async () => {
+    const response = await request(app).delete('/posts/' + testPosts[0]._id);
+    expect(response.statusCode).toBe(200);
+
+    const responseGet = await request(app).get('/posts/' + testPosts[0]._id);
+    expect(responseGet.statusCode).toBe(404);
+  });
+
   test("Test create new post fail", async () => {
     const response = await request(app).post("/posts").send({
       content: "Test Content 1",
