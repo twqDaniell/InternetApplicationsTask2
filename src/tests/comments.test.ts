@@ -98,6 +98,25 @@ describe("Comments Test", () => {
     expect(response.body.length).toBe(1);
   });
 
+  test("Test update comment", async () => {
+    const updatedData = { message: "Updated Comment Message" };
+    const response = await request(app)
+      .put(baseUrl + "/" + testComments[0]._id)
+      .set("authorization", "JWT " + testUser.accessToken)
+      .send(updatedData);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBe(updatedData.message);
+  });
+
+  test("Test update comment with non-existent ID", async () => {
+    const updatedData = { message: "Non-existent Comment Update" };
+    const response = await request(app)
+      .put(baseUrl + "/invalidCommentId")
+      .set("authorization", "JWT " + testUser.accessToken)
+      .send(updatedData);
+    expect(response.statusCode).toBe(404);
+  });
+  
   test("Test Delete comment", async () => {
     const response = await request(app).delete(baseUrl + "/" + testComments[0]._id).set("authorization", "JWT " + testUser.accessToken);
     expect(response.statusCode).toBe(200);

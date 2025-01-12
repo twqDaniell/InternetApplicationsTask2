@@ -89,6 +89,26 @@ describe("Posts Test", () => {
     expect(response.body.length).toBe(2);
   });
 
+  test("Test update post", async () => {
+    const updatedData = { title: "Updated Title", content: "Updated Content" };
+    const response = await request(app)
+      .put("/posts/" + testPosts[0]._id)
+      .set("authorization", "JWT " + testUser.accessToken)
+      .send(updatedData);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.title).toBe(updatedData.title);
+    expect(response.body.content).toBe(updatedData.content);
+  });
+
+  test("Test update post with non-existent ID", async () => {
+    const updatedData = { title: "Non-existent Title" };
+    const response = await request(app)
+      .put("/posts/invalidPostId")
+      .set("authorization", "JWT " + testUser.accessToken)
+      .send(updatedData);
+    expect(response.statusCode).toBe(404);
+  });  
+
   test("Test Delete post", async () => {
     const response = await request(app).delete('/posts/' + testPosts[0]._id).set("authorization", "JWT " + testUser.accessToken);
     expect(response.statusCode).toBe(200);
