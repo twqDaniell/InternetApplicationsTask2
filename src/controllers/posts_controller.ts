@@ -60,6 +60,17 @@ class PostsController<IPost> {
       res.status(400).send(error);
     }
   };
+
+  async deletePost(req: Request, res: Response) {
+    const postId = req.params.id;
+
+    try {
+      await this.post.findByIdAndDelete(postId);
+      res.status(200).send();
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
 };
 
 export default new PostsController(postModel);
