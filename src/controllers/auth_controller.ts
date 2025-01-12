@@ -153,6 +153,29 @@ const logout = async (req: Request, res: Response) => {
   }
 };
 
+const refresh = async (req: Request, res: Response) => {
+    const refreshToken = req.body.refreshToken;
+
+    try {
+        const user = await verifyAccessToken(refreshToken);
+
+        const tokens = generateTokens(user);
+        await user.save();
+
+        if(!tokens) {
+            res.status(400).send("Access denied");
+            return;
+        }
+
+        res.status(200).send({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken
+        });
+    } catch (err) {
+        res.status(400).send("Access Denied");
+    }
+}
+
 type Payload = {
     _id: string;
 }
@@ -180,4 +203,4 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     });
 };
 
-export default { register, login, logout };
+export default { register, login, logout, refresh };

@@ -110,6 +110,18 @@ describe("Auth Test", () => {
     expect(response3.statusCode).not.toBe(201);
   });
 
+  test("Test refresh token", async () => {
+    const response = await request(app).post("/auth/refresh").send({
+      refreshToken: testUser.refreshToken
+    })
+
+    expect(response.statusCode).toBe(200);
+    testUser.accessToken = response.body.accessToken;
+    testUser.refreshToken = response.body.refreshToken;
+    expect(testUser.accessToken).toBeDefined;
+    expect(testUser.refreshToken).toBeDefined;
+  })
+
   test("Test logout", async () => {
     const response1 = await request(app).post("/auth/login").send(testUser);
     expect(response1.statusCode).toBe(200);
@@ -137,4 +149,24 @@ describe("Auth Test", () => {
     expect(response2.statusCode).toBe(200);
     expect(response2.body.refreshToken).not.toEqual(testUser.refreshToken);
   });
+
+    test("Test refresh token fail", async () => {
+    const response = await request(app).post("/auth/refresh").send({
+      refreshToken: testUser.refreshToken
+    })
+
+    expect(response.statusCode).toBe(200);
+
+    const response2 = await request(app).post("/auth/refresh").send({
+      refreshToken: testUser.refreshToken
+    })
+    
+    expect(response2.statusCode).not.toBe(200);
+
+    const response3 = await request(app).post("/auth/refresh").send({
+      refreshToken: testUser.refreshToken
+    })
+    
+    expect(response3.statusCode).not.toBe(200);
+  })
 });
