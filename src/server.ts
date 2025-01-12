@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import postsRoute from "./routes/posts_route";
 import commentsRoute from "./routes/comments_route";
-import usersRoute from "./routes/users_route";
 import authRoute from "./routes/auth_route";
 
 const db = mongoose.connection;
@@ -24,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/posts", postsRoute);
 app.use("/comments", commentsRoute);
-app.use("/users", usersRoute);
 app.use("/auth", authRoute);
 
 const initApp = () => {
