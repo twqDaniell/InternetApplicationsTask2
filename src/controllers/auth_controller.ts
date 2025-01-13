@@ -12,7 +12,7 @@ type UserDocument = Document<unknown, {}, IUser> &
     __v: number;
   };
 
-const generateTokens = (
+export const generateTokens = (
   user: IUser
 ): { accessToken: string; refreshToken: string } | null => {
   if (!process.env.TOKEN_SECRET) {
@@ -40,7 +40,7 @@ const generateTokens = (
   return { accessToken: accessToken, refreshToken: refreshToken };
 };
 
-const verifyAccessToken = (refreshToken: string | undefined) => {
+export const verifyAccessToken = (refreshToken: string | undefined) => {
   return new Promise<UserDocument>((resolve, reject) => {
     if (!refreshToken) {
       reject("Access denied");

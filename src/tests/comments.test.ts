@@ -89,14 +89,19 @@ describe("Comments Test", () => {
   });
 
   test("Test filter commments by user", async () => {
-    const response = await request(app).get(baseUrl + "?user=" + testComments[0].user
-    );
-
-    console.log(response.body);
+    const response = await request(app).get(baseUrl + "?user=" + testComments[0].user);
     
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(1);
   });
+
+  test("Test filter commments by post", async () => {
+    const response = await request(app).get(baseUrl + "?postId=" + testComments[0].postId);
+    
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBe(1);
+  });
+
 
   test("Test update comment", async () => {
     const updatedData = { message: "Updated Comment Message" };
