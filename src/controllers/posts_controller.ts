@@ -35,10 +35,10 @@ class PostsController<IPost> {
   };
 
   async getAllPosts(req: Request, res: Response) {
-    const ownerFilter = req.query.owner;
+    const ownerFilter = req.query.sender;
     try {
       if (ownerFilter) {
-        const posts = await this.post.find({ owner: ownerFilter });
+        const posts = await this.post.find({ sender: ownerFilter });
         res.status(200).send(posts);
       } else {
         const posts = await this.post.find();

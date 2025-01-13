@@ -17,19 +17,23 @@ class CommentsController<IComment> {
     } catch (error) {
       res.status(400).send(error);
     }
-  };
+  }
 
   async updateComment(req: Request, res: Response) {
     const commentId = req.params.id;
     const updateData = req.body;
-  
+
     try {
-      const updatedComment = await this.comment.findByIdAndUpdate(commentId, updateData, { new: true });
+      const updatedComment = await this.comment.findByIdAndUpdate(
+        commentId,
+        updateData,
+        { new: true }
+      );
       res.status(200).send(updatedComment);
     } catch (error) {
       res.status(400).send(error);
     }
-  };
+  }
 
   async deleteComment(req: Request, res: Response) {
     const commentId = req.params.id;
@@ -40,7 +44,7 @@ class CommentsController<IComment> {
     } catch (error) {
       res.status(400).send(error);
     }
-  };
+  }
 
   async getAllComments(req: Request, res: Response) {
     const postFilter = req.query.postId;
@@ -60,7 +64,7 @@ class CommentsController<IComment> {
     } catch (error) {
       res.status(400).send(error);
     }
-  };
+  }
 
   async getCommentById(req: Request, res: Response) {
     const commentId = req.params.id;
@@ -76,7 +80,7 @@ class CommentsController<IComment> {
     } catch (error) {
       res.status(400).send(error);
     }
-  };
-};
+  }
+}
 
 export default new CommentsController(commentModel);
